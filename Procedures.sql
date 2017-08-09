@@ -6,53 +6,47 @@
 */
 
 /* if procedure is already defined remove it*/
-DROP PROCEDURE IF EXISTS DisplayData;
-DROP PROCEDURE IF EXISTS DisplayDetail;
-DROP PROCEDURE IF EXISTS DisplayMaster;
-DROP PROCEDURE IF EXISTS InsertMaster;
-DROP PROCEDURE IF EXISTS InsertDetail;
+DROP PROCEDURE IF EXISTS Thortech.DisplayData;
+DROP PROCEDURE IF EXISTS Thortech.DisplayDetail;
+DROP PROCEDURE IF EXISTS Thortech.DisplayMaster;
+DROP PROCEDURE IF EXISTS Thortech.InsertMaster;
+DROP PROCEDURE IF EXISTS Thortech.InsertDetail;
 
 /* create the procedure to display all the table data*/
-CREATE PROCEDURE DisplayData ()
-SQL SECURITY DEFINER
-COMMENT 'master and detail table data'
+DELIMITER $$
+CREATE PROCEDURE Thortech.DisplayData ()
 BEGIN
-	SELECT * FROM masterTable mt INNER JOIN detailTable dt ON mt.ID=dt.masterID;
-END
-DELIMITER ;
+	SELECT * FROM Thortech.masterTable mt 
+	INNER JOIN Thortech.detailTable dt 
+	ON mt.ID=dt.masterID;
+END $$
 
 /* create the procedure to disply all the detail table data */
-CREATE PROCEDURE DisplayDetail ()
-SQL SECURITY DEFINER
-COMMENT 'grab all the data in the detail table'
+DELIMITER $$
+CREATE PROCEDURE Thortech.DisplayDetail ()
 BEGIN
-	SELECT * FROM detailTable WHERE 1
-END
-DELIMITER ;
+	SELECT * FROM Thortech.detailTable WHERE 1;
+END $$
 
 /* create the procedure to display all the master table data */
-CREATE PROCEDURE DisplayMaster ()
-SQL SECURITY DEFINER
-COMMENT 'grab all the data in the master table'
+DELIMITER $$
+CREATE PROCEDURE Thortech.DisplayMaster ()
 BEGIN
-	SELECT * FROM masterTable WHERE 1
-END
-DELIMITER ;
+	SELECT * FROM Thortech.masterTable WHERE 1;
+END $$
 
 /* insert into the detail table */
-CREATE PROCEDURE InsertDetail (@masterID int, @value varchar(100))
-SQL SECURITY DEFINER
-COMMENT 'insert into detail table'
+DELIMITER $$
+CREATE PROCEDURE Thortech.InsertDetail
+	(IN masterID int, IN value varchar(100))
 BEGIN
-	INSERT INTO detailTable VALUES(@masterID, @value)
-END
-DELIMITER ;
+	INSERT INTO Thortech.detailTable VALUES(masterID, value);
+END $$
 
 /* insert into the master table */
-CREATE PROCEDURE InsertMaster (@value varchar(100))
-SQL SECURITY DEFINER
-COMMENT 'insert into master table'
+DELIMITER $$
+CREATE PROCEDURE Thortech.InsertMaster
+	(IN value varchar(100))
 BEGIN
-	INSERT INTO masterTable VALUES(@value)
-END
-DELIMITER ;
+	INSERT INTO Thortech.masterTable VALUES(value);
+END $$

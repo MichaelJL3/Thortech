@@ -1,10 +1,8 @@
 
 '''
-insertData.py
-
-author: Michael Laucella
-
-desc: generates two sets of random strings 
+@file insertData.py
+@author Michael Laucella
+@desc generates two sets of random strings 
 	  and inserts them into two different database tables
 '''
 
@@ -39,7 +37,7 @@ def getConsonant():
 		'z'
 	]
 	
-	prob = random.randint(0, len(consonants))
+	prob = getRandNumber(0, len(consonants)-1)
 	return consonants[prob]
 
 #get a vowel
@@ -59,7 +57,7 @@ def getVowel():
 
 #get a random integer (easily modifiable if definition of desired number changes)
 def getRandNumber(a,b):
-	return random.randint(a, b+1)	
+	return random.randint(a, b)	
 
 #get a probablility between 0 and 1
 def getProbability():
@@ -79,7 +77,7 @@ def getLetter():
 #get a random string length 
 #using an average of 4 letters per word in a gaussian distribution
 def getStringLength():
-	return round(random.gauss(4, 1.5))
+	return int(round(random.gauss(4, 1.5)))
 
 #generate n strings and return as array
 def makeStrings(n):
@@ -88,9 +86,9 @@ def makeStrings(n):
 	for i in range(n):
 		randStr=""
 		#length of string
-		len = getStringLength()
+		length = getStringLength()
 		
-		for j in range(len):
+		for j in range(length):
 			c = getLetter()
 			randStr+=c
 
@@ -105,23 +103,25 @@ def reference(arrStr, numRefs):
 	
 	#create tuples of (masterID, string)
 	for randStr in arrStr:
-		arrTup.append(getRandNumber(0, numRefs), randStr))
+		arrTup.append((getRandNumber(0, numRefs), randStr))
 		
 	return arrTup
 
 #save the string array to the master table
 def saveStringsIntoMaster(arrStr, ex):
 	try:
-		ex.executemany("INSERT INTO masterTable (value) values (%s)"), arrStr)
+		ex.executemany("INSERT INTO masterTable (value) values (%s)", arrStr)
 	except(MySQLdb.Error) as e:
+		print("saving to master error")
 		print(e)
 		sys.exit(0)
 
 #save the (ID,string) tuples into the detail table
 def saveStringsIntoDetail(arrTup, ex):
 	try:
-		ex.executemany("INSERT INTO detailTable (masterID, value) values (%d, %s)"), arrTup)
+		ex.executemany("INSERT INTO detailTable (masterID, value) values (%s, %s)", arrTup)
 	except(MySQLdb.Error) as e:
+		print("saving to detail error")
 		print(e)
 		sys.exit(0)
 
@@ -142,7 +142,7 @@ def main():
 	
 	#establish db connection
 	try:
-		db = MySQLdv.connect(
+		db = MySQLdb.connect(
 			host="localhost",
 			user="mike",
 			passwd="pass",
@@ -160,6 +160,7 @@ def main():
 	saveStringsIntoDetail(reference(makeStrings(numStrDetail), numStrMaster), ex)
 	
 	ex.close()
+	db.commit()
 	db.close()
 
 #program entry point
