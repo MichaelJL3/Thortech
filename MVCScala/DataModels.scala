@@ -36,7 +36,8 @@ extends DataModel(indx, valu) {
         new DataModelContainer(index, value, child :: children)
 
     def - (child: DataModel) = 
-        new DataModelContainer(index, value, children.filter(index!=child.index))
+        new DataModelContainer(index, value, 
+            children.filterNot(elm => elm.index == child.index))
 
     def clear() = new DataModelContainer(index, value, Nil)
 
@@ -46,16 +47,4 @@ extends DataModel(indx, valu) {
             str+="\n\t"+child
         str
     }
-}
-
-class DataViewer () {
-    //single display of all items
-    //selecting needs to trigger event to fire on controllers specific container
-}
-
-object Test extends App {
-    val testCon = new DataModelContainer(0, "test", Nil)
-    val model = new DataModel(1, "test")
-    println(testCon)
-    println(testCon+model+model)
 }
