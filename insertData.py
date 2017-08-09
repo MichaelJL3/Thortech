@@ -103,7 +103,7 @@ def reference(arrStr, numRefs):
 	
 	#create tuples of (masterID, string)
 	for randStr in arrStr:
-		arrTup.append((getRandNumber(0, numRefs), randStr))
+		arrTup.append((getRandNumber(1, numRefs), randStr))
 		
 	return arrTup
 

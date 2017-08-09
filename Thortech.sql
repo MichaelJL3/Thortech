@@ -13,6 +13,7 @@ CREATE DATABASE Thortech;
 DROP USER 'mike'@'localhost';
 CREATE USER 'mike'@'localhost' IDENTIFIED BY 'pass';
 GRANT ALL PRIVILEGES ON Thortech . * TO 'mike'@'localhost';
+GRANT ALL PRIVILEGES ON `mysql`.`proc` TO 'mike'@'localhost';
 FLUSH PRIVILEGES;
 
 /*

@@ -50,3 +50,9 @@ CREATE PROCEDURE Thortech.InsertMaster
 BEGIN
 	INSERT INTO Thortech.masterTable VALUES(value);
 END $$
+
+GRANT EXECUTE ON PROCEDURE Thortech.DisplayData TO 'mike'@'localhost';
+GRANT EXECUTE ON PROCEDURE Thortech.DisplayDetail TO 'mike'@'localhost';
+GRANT EXECUTE ON PROCEDURE Thortech.DisplayMaster TO 'mike'@'localhost';
+GRANT EXECUTE ON PROCEDURE Thortech.InsertMaster TO 'mike'@'localhost';
+GRANT EXECUTE ON PROCEDURE Thortech.InsertDetail TO 'mike'@'localhost';

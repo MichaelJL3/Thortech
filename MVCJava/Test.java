@@ -24,7 +24,7 @@ public class Test {
             ResultSet rs = cs.executeQuery();
 
             while(rs.next()){
-                System.out.println(rs);
+                System.out.println(rs.getInt(1));
             }
 
             con.close();
