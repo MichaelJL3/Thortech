@@ -32,6 +32,8 @@ class DataModelContainer (indx: Int, valu: String, models: List[DataModel])
 extends DataModel(indx, valu) {
     val children = models 
 
+    def getChildValue (childIndex: Int) = children.filter(child => child.index == childIndex)
+
     def + (child: DataModel) = 
         new DataModelContainer(index, value, child :: children)
 

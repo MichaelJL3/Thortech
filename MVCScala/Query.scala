@@ -17,13 +17,13 @@ import java.sql.DriverManager
  * @param {String} db the database to connect to
  */
 class Query (host: String, username: String, password: String, db: String) {
-    private val Pre_Url = "jdbc:mysql://"
+    private val PreUrl = "jdbc:mysql://"
     private val Driver = "com.mysql.jdbc.Driver"
     private var con:Connection = null
 
     Class.forName(Driver)
 
-    con = DriverManager.getConnection(Pre_Url + host + "/" + db, username, password)
+    con = DriverManager.getConnection(PreUrl + host + "/" + db, username, password)
 
     /**
      * @name callProcedure

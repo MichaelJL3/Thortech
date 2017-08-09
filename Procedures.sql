@@ -51,8 +51,17 @@ BEGIN
 	INSERT INTO Thortech.masterTable VALUES(value);
 END $$
 
+/* get the size of the master table */
+DELIMITER $$
+CREATE PROCEDURE Thortech.MasterSize ()
+BEGIN
+	SELECT COUNT("ID") AS count FROM Thortech.masterTable WHERE 1; 
+END $$
+
+/* grant execute permissions for procedures  */
 GRANT EXECUTE ON PROCEDURE Thortech.DisplayData TO 'mike'@'localhost';
 GRANT EXECUTE ON PROCEDURE Thortech.DisplayDetail TO 'mike'@'localhost';
 GRANT EXECUTE ON PROCEDURE Thortech.DisplayMaster TO 'mike'@'localhost';
 GRANT EXECUTE ON PROCEDURE Thortech.InsertMaster TO 'mike'@'localhost';
 GRANT EXECUTE ON PROCEDURE Thortech.InsertDetail TO 'mike'@'localhost';
+GRANT EXECUTE ON PROCEDURE Thortech.MasterSize TO 'mike'@'localhost';
