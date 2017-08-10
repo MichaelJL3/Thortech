@@ -27,7 +27,7 @@ placing them on **AWS** as a web based MVC so I switched to a much more
 web friendly **JS** stack these files are located in **MVCNode**
 
 For more descriptive information on the MVC
-check out [README.md](./MVCNode/README.md)
+check out [README.md](./MVCNode/api/README.md)
 **note** this is a different readme
 
 ## Files
