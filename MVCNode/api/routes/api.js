@@ -46,7 +46,7 @@ router.get('/', function(req, res, next) {
 router.get('/displayRelational', function(req, res, next){
   //check if value is cached
   const masterCached = cache.get("R_ALL")
-  if(masterCached) return send(master, res)
+  if(masterCached) return send(masterCached, res)
 
   conn.queryAsync("CALL DisplayMaster()")
     .then(results=>{
@@ -86,7 +86,7 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
   
   //check if value is cached
   const masterCached = cache.get(id)
-  if(masterCached) return send(master, res)
+  if(masterCached) return send(masterCached, res)
 
   conn.queryAsync("CALL DisplayMasterByID("+id+")")
     .then(results=>{
