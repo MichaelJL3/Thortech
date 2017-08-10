@@ -84,16 +84,16 @@ def makeStrings(n):
 	arrStr=[]
 
 	for i in range(n):
-		randStr=""
+		randStr = ""
 		#length of string
 		length = getStringLength()
 		
 		for j in range(length):
 			c = getLetter()
-			randStr+=c
+			randStr += c
 
 		#append string to array
-		arrStr.append(randStr)
+		arrStr.append((randStr,))
 		
 	return arrStr
 	
@@ -110,7 +110,7 @@ def reference(arrStr, numRefs):
 #save the string array to the master table
 def saveStringsIntoMaster(arrStr, ex):
 	try:
-		ex.executemany("INSERT INTO masterTable (value) values (%s)", arrStr)
+		ex.executemany("INSERT INTO masterTable (value) VALUES (%s)", arrStr)
 	except(MySQLdb.Error) as e:
 		print("saving to master error")
 		print(e)
@@ -119,7 +119,7 @@ def saveStringsIntoMaster(arrStr, ex):
 #save the (ID,string) tuples into the detail table
 def saveStringsIntoDetail(arrTup, ex):
 	try:
-		ex.executemany("INSERT INTO detailTable (masterID, value) values (%s, %s)", arrTup)
+		ex.executemany("INSERT INTO detailTable (masterID, value) VALUES (%s, %s)", arrTup)
 	except(MySQLdb.Error) as e:
 		print("saving to detail error")
 		print(e)
@@ -129,14 +129,14 @@ def saveStringsIntoDetail(arrTup, ex):
 #gets the number of strings to make, creates them, inserts into db
 def main():
 	#get number of strings for master table
-	if(len(sys.argv)>1 and isinstance(argv[1], int)):
-		numStrMaster = argv[1]
+	if(len(sys.argv)>1):
+		numStrMaster = int(sys.argv[1])
 	else:
 		numStrMaster = getRandNumber(1, 1000)
 	
 	#get number of strings for detail table
-	if(len(sys.argv)>2 and isinstance(argv[2], int)):
-		numStrDetail = argv[2]
+	if(len(sys.argv)>2):
+		numStrDetail = int(sys.argv[2])
 	else:
 		numStrDetail = getRandNumber(1, 1000)
 	

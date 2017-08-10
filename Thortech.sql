@@ -6,11 +6,11 @@ creates a new database and user for aws project
 */
 
 /* Create New Database */
-DROP DATABASE Thortech;
+DROP DATABASE IF EXISTS Thortech;
 CREATE DATABASE Thortech;
 
 /* Create Associated User With Permissions */
-DROP USER 'mike'@'localhost';
+DROP USER IF EXISTS 'mike'@'localhost';
 CREATE USER 'mike'@'localhost' IDENTIFIED BY 'pass';
 GRANT ALL PRIVILEGES ON Thortech . * TO 'mike'@'localhost';
 GRANT ALL PRIVILEGES ON `mysql`.`proc` TO 'mike'@'localhost';
