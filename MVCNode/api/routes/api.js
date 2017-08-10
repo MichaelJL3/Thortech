@@ -5,6 +5,8 @@
  * @desc defines the api routes and logic
  */
 
+const nodeCache = require('node-cache')
+const cache = new nodeCache()
 const express = require('express')
 const router = express.Router()
 
@@ -42,6 +44,10 @@ router.get('/', function(req, res, next) {
  * and form them into a relational model for display
  */
 router.get('/displayRelational', function(req, res, next){
+  //check if value is cached
+  const masterCached = cache.get("R_ALL")
+  if(masterCached) return send(master, res)
+
   conn.queryAsync("CALL DisplayMaster()")
     .then(results=>{
       const master = {}
@@ -63,6 +69,8 @@ router.get('/displayRelational', function(req, res, next){
           })
           
           send(master, res)
+          //set cache
+          cache.set("R_ALL", master)
         })
     })
     .catch(err=>next(client(err)))
@@ -75,6 +83,11 @@ router.get('/displayRelational', function(req, res, next){
  */
 router.get('/displayRelational/:id', hasID, function(req, res, next){
   const id = req.params.id
+  
+  //check if value is cached
+  const masterCached = cache.get(id)
+  if(masterCached) return send(master, res)
+
   conn.queryAsync("CALL DisplayMasterByID("+id+")")
     .then(results=>{
       const result = results[0][0]
@@ -93,6 +106,8 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
           })
           
           send(master, res)
+          //set cache
+          cache.set(id, master)
         })
     })
     .catch(err=>next(client(err)))
@@ -232,7 +247,11 @@ router.post('/insertDetail', function(req, res, next){
   const parent = req.body.parent
   const value = req.body.value
   conn.queryAsync("CALL InsertMaster("+parent+" "+value+")")
-    .then(results=>send(results, res, 201))
+    .then(results=>{
+      send(results, res, 201)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
@@ -244,7 +263,11 @@ router.post('/insertDetail', function(req, res, next){
 router.post('/insertMaster', function(req, res, next){
   const value = req.body.value
   conn.queryAsync("CALL InsertDetail("+value+")")
-    .then(results=>send(results, res, 201))
+    .then(results=>{
+      send(results[0], res)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
@@ -257,7 +280,11 @@ router.put('/updateMaster', hasID, hasValue, function(req, res, next){
   const id = req.body.id
   const value = req.body.value
   conn.queryAsync("CALL UpdateMaster("+id+" "+value+")")
-    .then(results=>send(results[0], res))
+    .then(results=>{
+      send(results[0], res)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
@@ -270,7 +297,11 @@ router.put('/updateDetail', hasID, hasValue, function(req, res, next){
   const id = req.body.id
   const value = req.body.value
   conn.queryAsync("CALL UpdateDetail("+id+" "+value+")")
-    .then(results=>send(results[0], res))
+    .then(results=>{
+      send(results[0], res)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
@@ -284,7 +315,11 @@ router.put('/updateDetailParent', hasID, hasValue, hasParent, function(req, res,
   const parent = req.body.parent
   const value = req.body.value
   conn.queryAsync("CALL UpdateDetailParent("+id+" "+parent+" "+value+")")
-    .then(results=>send(results[0], res))
+    .then(results=>{
+      send(results[0], res)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
@@ -296,7 +331,11 @@ router.put('/updateDetailParent', hasID, hasValue, hasParent, function(req, res,
 router.delete('/deleteMaster/:id', function(req, res, next){
   const id = req.params.id
   conn.queryAsync("CALL DeleteMasterByID("+id+")")
-    .then(results=>send(results[0], res))
+    .then(results=>{
+      send(results[0], res)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
@@ -308,7 +347,11 @@ router.delete('/deleteMaster/:id', function(req, res, next){
 router.delete('/deleteDetail/:id', function(req, res, next){
   const id = req.params.id
   conn.queryAsync("CALL DeleteDetailByID("+id+")")
-    .then(results=>send(results[0], res))
+    .then(results=>{
+      send(results[0], res)
+      //reset the cached relations there has been a change
+      cache.del("R_ALL")
+    })
     .catch(err=>next(client(err)))
 })
 
