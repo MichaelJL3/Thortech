@@ -63,7 +63,7 @@ router.get('/displayRelational', function(req, res, next){
           //assign each child to appropriate master
           results[0].forEach(result=>{
             const child = new DataModel(result.ID, result.value)
-            const parent = result.masterID-1;
+            const parent = result.masterID;
             if(parent>=0&&master[parent])
               master[parent].addChild(child)
           })
@@ -96,12 +96,10 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
       //get children of the master ID
       conn.queryAsync("CALL ChildrenOf("+id+")")
         .then(results=>{
-          console.log(results);
           //add the children to the master object
           results[0].forEach(res=>{
             const child = new DataModel(res.ID, res.value)
             const parent = res.masterID;
-            console.log(parent, id)
             if(parent!==undefined&&parent===id)
               master.addChild(child)
           })
