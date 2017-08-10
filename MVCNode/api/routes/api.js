@@ -101,6 +101,7 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
           results[0].forEach(res=>{
             const child = new DataModel(res.ID, res.value)
             const parent = res.masterID;
+            console.log(parent, id)
             if(parent!==undefined&&parent===id)
               master.addChild(child)
           })
