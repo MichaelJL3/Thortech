@@ -25,14 +25,17 @@ class DataModel (indx: Int, valu: String) {
  * @extends DataModel
  * @param {Integer} indx the models index number
  * @param {String} valu the models value
- * @param {List[DataModel]} models a list containing a predefined set of models 
+ * @param {Object} models a list containing a predefined set of models 
  * to act as the children
  */
 class DataModelContainer (indx: Int, valu: String, models: List[DataModel]) 
 extends DataModel(indx, valu) {
     val children = models 
 
-    def getChildValue (childIndex: Int) = children.filter(child => child.index == childIndex)
+    def getChild (childIndex: Int) = children.filter(child => child.index == childIndex)
+
+    def setChild (childIndex: Int, model: DataModel) =
+        new DataModelContainer(index, value, model :: children.filterNot(elm => elm.index == child.index))
 
     def + (child: DataModel) = 
         new DataModelContainer(index, value, child :: children)

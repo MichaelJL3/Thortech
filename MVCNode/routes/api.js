@@ -44,20 +44,52 @@ router.get('/', function(req, res, next) {
 router.get('/displayRelational', function(req, res, next){
   conn.queryAsync("CALL DisplayMaster()")
     .then(results=>{
-      const master = []
+      const master = {}
       
-      results[0].forEach(res=>{
-        master.push(new MasterModel(res.ID, res.value))
+      //add every master to the masters object
+      results[0].forEach(result=>{
+        master[result.ID]=(new MasterModel(result.ID, result.value))
       })
       
       conn.queryAsync("CALL DisplayDetail()")
         .then(results=>{
           
+          //assign each child to appropriate master
+          results[0].forEach(result=>{
+            const child = new DataModel(result.ID, result.value)
+            const parent = result.masterID-1;
+            if(parent>=0&&master[parent])
+              master[parent].addChild(child)
+          })
+          
+          send(master, res)
+        })
+    })
+    .catch(err=>next(client(err)))
+})
+
+/**
+ * @name /displayRelational/:id
+ * @method GET
+ * @desc get a relational model of master and children by master id
+ */
+router.get('/displayRelational/:id', hasID, function(req, res, next){
+  const id = req.params.id
+  conn.queryAsync("CALL DisplayMasterByID("+id+")")
+    .then(results=>{
+      const result = results[0][0]
+      const master = new MasterModel(result.ID, result.value)
+      
+      //get children of the master ID
+      conn.queryAsync("CALL ChildrenOf("+id+")")
+        .then(results=>{
+          
+          //add the children to the master object
           results[0].forEach(res=>{
             const child = new DataModel(res.ID, res.value)
-            const parent = res.masterID-1;
-            if(parent!==undefined&&parent<master.length&&parent>=0)
-              master[parent].addChild(child)
+            const parent = res.masterID;
+            if(parent!==undefined&&parent===id)
+              master.addChild(child)
           })
           
           send(master, res)
