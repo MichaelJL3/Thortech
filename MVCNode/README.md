@@ -39,7 +39,7 @@ Table Of Contents
 
 ## Backend Stack
 
-[![Mysql][mysqlmall]](https://www.mysql.com/)
+[![Mysql][mysqlsmall]](https://www.mysql.com/)
 [![Nodejs][nodesmall]](https://nodejs.org/en/)
 
 The Backend API Stack is developed using **Nodejs** and the **express** library.
