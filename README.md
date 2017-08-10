@@ -5,9 +5,9 @@
 [![Nodejs][node]](https://nodejs.org/en/)
 [![React][react]](https://facebook.github.io/react/)
 
-[node]:  public/icons/nodejs-icon-medium.png "Nodejs"
-[mysql]: public/icons/mysql-icon-medium.png "Mysql"
-[react]: public/icons/react-icon-medium.png "React"
+[node]:  icons/nodejs-icon-medium.png "Nodejs"
+[mysql]: icons/mysql-icon-medium.png "Mysql"
+[react]: icons/react-icon-medium.png "React"
 
 # Description
 
