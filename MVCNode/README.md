@@ -1,7 +1,7 @@
 
 # ThortechMVCAPI
 
-[![Mysql][mysql]](https://www.mongodb.com/)
+[![Mysql][mysql]](https://www.mysql.com/)
 [![Nodejs][node]](https://nodejs.org/en/)
 
 [node]:  public/icons/nodejs-icon-medium.png "Nodejs"
