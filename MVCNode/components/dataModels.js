@@ -35,7 +35,7 @@ class MasterModel extends DataModel{
   }
 
   /**
-   * @name addChild
+   * @method addChild
    * @desc appends a new child to the list
    * @param {Object} child a DataModel object 
    */

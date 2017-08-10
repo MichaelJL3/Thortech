@@ -27,14 +27,19 @@ const client = modify.client
 const send   = modify.send
 
 /**
- * 
+ * @name /
+ * @method GET
+ * @desc redirect to /displayRelational
  */
 router.get('/', function(req, res, next) {
   res.redirect('/displayRelational')
 })
 
 /**
- * 
+ * @name /displayRelational
+ * @method GET
+ * @desc gather all the data from the master and detail tables
+ * and form them into a relational model for display
  */
 router.get('/displayRelational', function(req, res, next){
   conn.queryAsync("CALL DisplayMaster()")
@@ -62,7 +67,10 @@ router.get('/displayRelational', function(req, res, next){
 })
 
 /**
- * 
+ * @name /displayData
+ * @method GET
+ * @desc display all data from master and detail 
+ * in a relational join
  */
 router.get('/displayData', function(req, res, next){
   conn.queryAsync("CALL DisplayData()")
@@ -71,7 +79,9 @@ router.get('/displayData', function(req, res, next){
 })
 
 /**
- * 
+ * @name /detailSize
+ * @method GET
+ * @desc get the size of the detail table
  */
 router.get('/detailSize', function(req, res, next){
   conn.queryAsync("CALL DetailSize()")
@@ -80,7 +90,9 @@ router.get('/detailSize', function(req, res, next){
 })
 
 /**
- * 
+ * @name masterSize
+ * @method GET
+ * @desc get the size of the master table
  */
 router.get('/masterSize', function(req, res, next){
   conn.queryAsync("CALL MasterSize()")
@@ -89,7 +101,9 @@ router.get('/masterSize', function(req, res, next){
 })
 
 /**
- * 
+ * @name /displayDetail
+ * @method GET
+ * @desc display all the data in the detail table
  */
 router.get('/displayDetail', function(req, res, next){
   conn.queryAsync("CALL DisplayDetail()")
@@ -98,7 +112,9 @@ router.get('/displayDetail', function(req, res, next){
 })
 
 /**
- * 
+ * @name /displayDetail/:id
+ * @method GET
+ * @desc display a single item from the detail table
  */
 router.get('/displayDetail/:id', hasID, function(req, res, next){
   const id = req.params.id
@@ -108,7 +124,9 @@ router.get('/displayDetail/:id', hasID, function(req, res, next){
 })
 
 /**
- * 
+ * @name /displayMaster
+ * @method GET
+ * @desc display all the data in the master table
  */
 router.get('/displayMaster', function(req, res, next){
   conn.queryAsync("CALL DisplayMaster()")
@@ -117,7 +135,9 @@ router.get('/displayMaster', function(req, res, next){
 })
 
 /**
- * 
+ * @name /displayMaster/:id
+ * @method GET
+ * @desc display a single item from the master table
  */
 router.get('/displayMaster/:id', hasID, function(req, res, next){
   const id = req.params.id
@@ -127,7 +147,23 @@ router.get('/displayMaster/:id', hasID, function(req, res, next){
 })
 
 /**
- * 
+ * @name /display/:type
+ * @method GET
+ * @desc redirects to a display route based on type
+ */
+router.get('/display/:type', function(req, res, next){
+  const type = req.params.type
+  switch(type){
+    case "detail": return res.redirect('/displayDetail')
+    case "master": return res.redirect('/displayMaster')
+    default: return res.redirect('/')
+  }
+})
+
+/**
+ * @name /childrenOf/:id
+ * @method GET
+ * @desc gets all the children of the associated ID
  */
 router.get('/childrenOf/:id', hasID, function(req, res, next){
   const id = req.params.id
@@ -137,7 +173,10 @@ router.get('/childrenOf/:id', hasID, function(req, res, next){
 })
 
 /**
- * 
+ * @name /sibllingOf/:id
+ * @method GET
+ * @desc finds its own parent then redirects to get children
+ * of said parent, returned listing will include self
  */
 router.get('/siblingOf/:id', hasID, function(req, res, next){
   const id = req.params.id
@@ -153,7 +192,9 @@ router.get('/siblingOf/:id', hasID, function(req, res, next){
 })
 
 /**
- * 
+ * @name /insertDetail
+ * @method POST
+ * @desc insert a new detail entry into the DB
  */
 router.post('/insertDetail', function(req, res, next){
   const parent = req.body.parent
@@ -164,7 +205,9 @@ router.post('/insertDetail', function(req, res, next){
 })
 
 /**
- * 
+ * @name /insertMaster
+ * @method POST
+ * @desc insert a new master entry into the DB
  */
 router.post('/insertMaster', function(req, res, next){
   const value = req.body.value
@@ -174,7 +217,9 @@ router.post('/insertMaster', function(req, res, next){
 })
 
 /**
- * 
+ * @name /updateMaster
+ * @method PUT
+ * @desc updates a record in the master DB
  */
 router.put('/updateMaster', hasID, hasValue, function(req, res, next){
   const id = req.body.id
@@ -185,7 +230,9 @@ router.put('/updateMaster', hasID, hasValue, function(req, res, next){
 })
 
 /**
- * 
+ * @name /updateDetail
+ * @method PUT
+ * @desc updates a record in the detail DB
  */
 router.put('/updateDetail', hasID, hasValue, function(req, res, next){
   const id = req.body.id
@@ -196,7 +243,9 @@ router.put('/updateDetail', hasID, hasValue, function(req, res, next){
 })
 
 /**
- * 
+ * @name /updateDetailParent
+ * @method PUT
+ * @desc updates the parent of a detail as long as parent is valid
  */
 router.put('/updateDetailParent', hasID, hasValue, hasParent, function(req, res, next){
   const id = req.body.id
@@ -208,7 +257,9 @@ router.put('/updateDetailParent', hasID, hasValue, hasParent, function(req, res,
 })
 
 /**
- * 
+ * @name /deleteMaster/:id
+ * @method DELETE
+ * @desc delete an entry from the master DB
  */
 router.delete('/deleteMaster/:id', function(req, res, next){
   const id = req.params.id
@@ -218,7 +269,9 @@ router.delete('/deleteMaster/:id', function(req, res, next){
 })
 
 /**
- * 
+ * @name /deleteDetail/:id
+ * @method DELETE
+ * @desc delete an entry from the detail DB
  */
 router.delete('/deleteDetail/:id', function(req, res, next){
   const id = req.params.id
