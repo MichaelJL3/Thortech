@@ -97,9 +97,10 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
       conn.queryAsync("CALL ChildrenOf("+id+")")
         .then(results=>{
           //add the children to the master object
-          results[0].forEach(res=>{
-            const child = new DataModel(res.ID, res.value)
-            const parent = res.masterID;
+          results[0].forEach(result=>{
+            const child = new DataModel(result.ID, result.value)
+            const parent = result.masterID;
+            console.log(parent, id)
             if(parent!==undefined&&parent===id)
               master.addChild(child)
           })
