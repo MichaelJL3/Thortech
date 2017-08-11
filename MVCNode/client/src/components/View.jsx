@@ -10,6 +10,8 @@ import Request from './Request.js';
 import DataModelContainer from './DataModelContainer.jsx';
 import AlertBox from './Alerts.jsx';
 
+import "../stylesheets/Views.css";
+
 import {
     Accordion,
     Pagination
@@ -118,8 +120,8 @@ export default class View extends React.Component {
      */
     render() {
         return (
-            <div>
-		<AlertBox ref={r => this.msg = r}/>
+            <div id="appbody">
+		        <AlertBox ref={r => this.msg = r}/>
 
                 <Pagination
                     prev
@@ -138,7 +140,7 @@ export default class View extends React.Component {
                     { this.state.data.map (
                         (dataModelMaster, index) => 
                             <DataModelContainer 
-                                key={index} data-id={index} data={dataModelMaster}
+                                key={index} eventKey={index} data={dataModelMaster}
                             />
                     ) }
                 </Accordion>

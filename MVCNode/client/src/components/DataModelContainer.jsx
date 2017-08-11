@@ -8,6 +8,8 @@
 import React from "react";
 import DataModel from './DataModel.jsx';
 
+import "../stylesheets/DataModelContainer.css"
+
 import {
     Panel
 } from 'react-bootstrap';
@@ -17,15 +19,13 @@ import {
  * @desc houses data models 
  */
 const DataModelContainer = ({data}) => (
-    <div>
-        <Panel bsStyle="success" header={"Parent[" + data.index + "] : "+data.value}>
-            { data.children.map(
-                (dataModelChild, index) => <DataModel 
-                    key={index} data={dataModelChild}
-                />
-            ) }
-        </Panel>
-    </div>
+    <Panel className="parent" bsStyle="success" header={"Parent[" + data.index + "] : "+data.value}>
+        { data.children.map(
+            (dataModelChild, index) => <DataModel 
+                key={index} data={dataModelChild}
+            />
+        ) }
+    </Panel>
 )
 
 export default DataModelContainer;
