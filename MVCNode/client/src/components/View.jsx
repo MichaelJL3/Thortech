@@ -8,6 +8,7 @@
 import React from 'react';
 import Request from './Request.js';
 import DataModelContainer from './DataModelContainer.jsx';
+import AlertBox from './Alerts.jsx';
 
 import {
     Accordion,
@@ -79,21 +80,10 @@ export default class View extends React.Component {
                 pages: Math.ceil(data.length/this.limit)
             });
         }else if(res.warning){
-            //what about warnings ??
-            console.log(res.message);
+            this.msg.show(res.message, "warning");
         }else{
-            //what about errors ??
-            console.log(res.message);
+            this.msg.show(res.message, "error");
         }
-    }
-
-    /**
-     * @method groupClicked
-     * @desc reroutes to the page of the clicked list item
-     * @param {Object} e the event object
-     */
-    groupClicked = (e) => {
-        console.log(e.target.value);
     }
 
     /**
@@ -129,6 +119,7 @@ export default class View extends React.Component {
     render() {
         return (
             <div>
+		<AlertBox ref={r => this.msg = r}/>
 
                 <Pagination
                     prev
@@ -143,11 +134,11 @@ export default class View extends React.Component {
                     onSelect={this.handleSelect} 
                 />
 
-                <Accordion onClick = { this.groupClicked }>
+                <Accordion>
                     { this.state.data.map (
                         (dataModelMaster, index) => 
                             <DataModelContainer 
-                                key={index} data={dataModelMaster}
+                                key={index} data-id={index} data={dataModelMaster}
                             />
                     ) }
                 </Accordion>
