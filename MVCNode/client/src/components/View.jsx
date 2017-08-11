@@ -10,7 +10,7 @@ import Request from './Request.js';
 import DataModelContainer from './DataModelContainer.jsx';
 import AlertBox from './Alerts.jsx';
 
-import "../stylesheets/Views.css";
+import "../stylesheets/View.css";
 
 import {
     Accordion,
