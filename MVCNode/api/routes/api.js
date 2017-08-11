@@ -91,7 +91,8 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
   conn.queryAsync("CALL DisplayMasterByID("+id+")")
     .then(results=>{
       const result = results[0][0]
-      const master = new MasterModel(result.ID, result.value)
+      const master = {}
+      master[result.ID] = new MasterModel(result.ID, result.value)
       
       //get children of the master ID
       conn.queryAsync("CALL ChildrenOf("+id+")")

@@ -9,6 +9,11 @@ import React from 'react';
 import Request from './Request.js';
 import DataModelContainer from './DataModelContainer.jsx';
 
+import {
+    Accordion,
+    Pagination
+} from 'react-bootstrap';
+
 /**
  * @class View
  * @desc component for the view 
@@ -22,12 +27,17 @@ export default class View extends React.Component {
      */
     constructor(props){
         super(props);
-
+        
         this.id = props.match&&props.match.params&&props.match.params.id;
         this.url = "/displayRelational"+(this.id?"/"+this.id:"");
 
+        this.limit = 20;
+        this.data = []
+
         this.state = {
-            data: []
+            data: [],
+            activePage: 1,
+            pages: 0
         };
     }
 
@@ -39,7 +49,9 @@ export default class View extends React.Component {
      * @return {Boolean} if the component should update
      */
     shouldComponentUpdate(nextProps, nextState) {
-        return !arrayEquals(this.state.data, nextState.data);
+        const boolPage = nextState.activePage !== this.state.activePage;
+        const boolPages = nextState.pages !== this.state.pages;
+        return boolPage||boolPages||!arrayEquals(this.state.data, nextState.data);
     }
 
     /**
@@ -60,7 +72,12 @@ export default class View extends React.Component {
             const data = Object.keys(res.data).map((key)=>{
                 return res.data[key];
             });
-            this.setState({data: data});
+
+            this.data = data;
+            this.setState({
+                data: this.getData(),
+                pages: Math.ceil(data.length/this.limit)
+            });
         }else if(res.warning){
             //what about warnings ??
             console.log(res.message);
@@ -71,6 +88,40 @@ export default class View extends React.Component {
     }
 
     /**
+     * @method groupClicked
+     * @desc reroutes to the page of the clicked list item
+     * @param {Object} e the event object
+     */
+    groupClicked = (e) => {
+        console.log(e.target.value);
+    }
+
+    /**
+     * @method getData
+     * @desc takes a section of the data block relevant to the users page
+     * @param {Integer} p an optional page number, will default to the set active page
+     * @return {Array} a sliced portion of the data array
+     */
+    getData = (p) => {
+        const page = p || this.state.activePage;
+        const lowerBound = (page-1) * this.limit;
+        const upperBound = page * this.limit;
+        return this.data.slice(lowerBound, upperBound)
+    }
+
+    /**
+     * @method handleSelect
+     * @desc handles page change state settings
+     * @param {Object} e the event object
+     */
+    handleSelect = (e) => {
+        this.setState({ 
+            activePage: e,
+            data: this.getData(e)
+        });
+    }
+
+    /**
      * @function render
      * @desc returns renderable jsx code
      * @return {Component} the component display to render
@@ -78,10 +129,29 @@ export default class View extends React.Component {
     render() {
         return (
             <div>
-                { this.state.data.map (
-                    (dataModelMaster, index) => 
-                        <DataModelContainer key={index} data={dataModelMaster}/>
-                ) }
+
+                <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    ellipsis
+                    boundaryLinks
+                    items={this.state.pages}
+                    maxButtons={5}
+                    activePage={this.state.activePage}
+                    onSelect={this.handleSelect} 
+                />
+
+                <Accordion onClick = { this.groupClicked }>
+                    { this.state.data.map (
+                        (dataModelMaster, index) => 
+                            <DataModelContainer 
+                                key={index} data={dataModelMaster}
+                            />
+                    ) }
+                </Accordion>
+
             </div>
         )
     }
