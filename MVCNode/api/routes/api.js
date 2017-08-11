@@ -102,7 +102,7 @@ router.get('/displayRelational/:id', hasID, function(req, res, next){
             const child = new DataModel(result.ID, result.value)
             const parent = result.masterID;
             if(parent!==undefined&&parent===+id)
-              master.parent.addChild(child)
+              master[parent].addChild(child)
           })
           
           send(master, res)
