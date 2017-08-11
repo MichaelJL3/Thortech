@@ -7,4 +7,6 @@ styles for the data app view
 
 #appbody {
     padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
