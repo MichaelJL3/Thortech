@@ -13,7 +13,7 @@ import AlertBox from './Alerts.jsx';
 import "../stylesheets/View.css";
 
 import {
-    Accordion,
+    PanelGroup,
     Pagination,
     Jumbotron
 } from 'react-bootstrap';
@@ -122,29 +122,20 @@ export default class View extends React.Component {
     render() {
         return (
             <div id="appbody">
-	        <div className="welcome">
+                <div className="welcome">
                     <Jumbotron className="screen">
-                        <h1>Thortech</h1>
-                        <h3>Relational Data List</h3>
+                        <h1> Thortech </h1>
+                        <h3> Relational Data List </h3>
                         <ul>
-                           <li> 
-                               use the page bar to see more results 
-                           </li>
-                           <li>
-                               red list items have no children
-                           </li>
-                           <li>
-                               click green list items to expand child list
-                           </li>
-                           <li>
-                               enter in a /number to redirect to single element
-                           </li>
+                            <li> use the page bar to see more results </li>
+                            <li> click green list items to expand child list </li>
+                            <li> red list items have no children </li>
+                            <li> enter in a /number to redirect to single element </li>
                         </ul>
                     </Jumbotron>
                 </div> 
-          
 
-	        <AlertBox ref={r => this.msg = r}/>
+        	    <AlertBox ref={r => this.msg = r}/>
 
                 <Pagination
                     prev
@@ -159,14 +150,14 @@ export default class View extends React.Component {
                     onSelect={this.handleSelect} 
                 />
 
-                <Accordion>
+                <PanelGroup>
                     { this.state.data.map (
                         (dataModelMaster, index) => 
                             <DataModelContainer 
-                                key={index} eventKey={index} data={dataModelMaster}
+                                key={index} data={dataModelMaster}
                             />
                     ) }
-                </Accordion>
+                </PanelGroup>
 
             </div>
         )
