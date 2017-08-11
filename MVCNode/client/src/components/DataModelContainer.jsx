@@ -19,7 +19,12 @@ import {
  * @desc houses data models 
  */
 const DataModelContainer = ({data}) => (
-    <Panel className="parent" bsStyle="success" header={"Parent[" + data.index + "] : "+data.value}>
+    <Panel 
+        className="parent" 
+        bsStyle={(data.children.length?"success":"danger")} 
+        collapsible={(data.children.length?true:false)} 
+        header={"Parent[" + data.index + "] : "+data.value}
+    >
         { data.children.map(
             (dataModelChild, index) => <DataModel 
                 key={index} data={dataModelChild}

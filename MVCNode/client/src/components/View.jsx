@@ -14,7 +14,8 @@ import "../stylesheets/View.css";
 
 import {
     Accordion,
-    Pagination
+    Pagination,
+    Jumbotron
 } from 'react-bootstrap';
 
 /**
@@ -84,7 +85,7 @@ export default class View extends React.Component {
         }else if(res.warning){
             this.msg.show(res.message, "warning");
         }else{
-            this.msg.show(res.message, "error");
+            this.msg.show(res.message, "danger");
         }
     }
 
@@ -121,7 +122,29 @@ export default class View extends React.Component {
     render() {
         return (
             <div id="appbody">
-		        <AlertBox ref={r => this.msg = r}/>
+	        <div className="welcome">
+                    <Jumbotron className="screen">
+                        <h1>Thortech</h1>
+                        <h3>Relational Data List</h3>
+                        <ul>
+                           <li> 
+                               use the page bar to see more results 
+                           </li>
+                           <li>
+                               red list items have no children
+                           </li>
+                           <li>
+                               click green list items to expand child list
+                           </li>
+                           <li>
+                               enter in a /number to redirect to single element
+                           </li>
+                        </ul>
+                    </Jumbotron>
+                </div> 
+          
+
+	        <AlertBox ref={r => this.msg = r}/>
 
                 <Pagination
                     prev
